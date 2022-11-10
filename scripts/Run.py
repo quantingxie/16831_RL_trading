@@ -9,14 +9,15 @@ import quantstats as qs
 from PPO import model
 
 
-window_size = 30
+window_size = 20
 start_index = window_size
-end_train_date = 1500
-end_test_date = 1800
+end_train_date = 2000
+end_test_date = 2200
 
 model.load('models/PPO_model')
 env = gym.make('stocks-v0', df=STOCKS_GOOGL, frame_bound=(end_train_date,end_test_date), window_size=window_size)
 obs = env.reset()
+
 while True:
     obs = obs[np.newaxis, ...]
     action, _states = model.predict(obs)
@@ -33,8 +34,8 @@ plt.show()
 
 qs.extend_pandas()
 
-net_worth = pd.Series(env.history['total_profit'], index=STOCKS_GOOGL.index[day_begin+1:day_end])
+net_worth = pd.Series(env.history['total_profit'], index=STOCKS_GOOGL.index[end_train_date+1:end_test_date])
 returns = net_worth.pct_change().iloc[1:]
 
 qs.reports.full(returns)
-qs.reports.html(returns, output='A2C_quantstats.html')
+qs.reports.html(returns, output='PPO_quantstats.html')

@@ -14,27 +14,11 @@ import pandas as pd
 import quantstats as qs
 
 
-window_size = 30
+window_size = 20
 start_index = window_size
-end_train_date = 1500
+end_train_date = 2000
+end_test_date = 2200
 
-# df = pd.read_csv('/home/quanting/PycharmProjects/16831_RL_trading/Reinforcement-Learning-for-Trading-main/data/gmedata.csv')
-#
-# df['Date'] = pd.to_datetime(df['Date'])
-#
-# df.set_index('Date', inplace=True)
-# Making the environment using data from gym_anytrading
-
-# def my_process_data(env):
-#     start = env.frame_bound[0] - env.window_size
-#     end = env.frame_bound[1]
-#     prices = env.df.loc[:, 'Low'].to_numpy()[start:end]
-#     signal_features = env.df.loc[:, ['Close', 'Open', 'High', 'Low']].to_numpy()[start:end]
-#     return prices, signal_features
-#
-#
-# class MyForexEnv(StocksEnv):
-#     _process_data = my_process_data
 
 
 env = gym.make('stocks-v0',
@@ -45,3 +29,29 @@ env = gym.make('stocks-v0',
 model = PPO("MlpPolicy", env, verbose=1)
 model.learn(total_timesteps=500000)
 model.save('models/PPO_model')
+
+
+# env = gym.make('stocks-v0', df=STOCKS_GOOGL, frame_bound=(end_train_date,end_test_date), window_size=window_size)
+# obs = env.reset()
+
+# while True:
+#     obs = obs[np.newaxis, ...]
+#     action, _states = model.predict(obs)
+#     obs, rewards, done, info = env.step(action)
+#     env.render()
+#     if done:
+#         print("info", info)
+#         break
+#
+# plt.figure(figsize=(15,6))
+# plt.cla()
+# # env.render_all()
+# plt.show()
+#
+# qs.extend_pandas()
+#
+# net_worth = pd.Series(env.history['total_profit'], index=STOCKS_GOOGL.index[end_train_date+1:end_test_date])
+# returns = net_worth.pct_change().iloc[1:]
+#
+# qs.reports.full(returns)
+# qs.reports.html(returns, output='PPO_quantstats.html')

@@ -7,15 +7,16 @@ import quantstats as qs
 import pandas as pd
 
 #  Hyperparameters
-window_size = 10
+window_size = 20
 start_index = window_size
-day_begin = 100
-day_end = 300
+day_begin = 2000
+day_end = 2200
 env = gym.make('stocks-v0',
                df = STOCKS_GOOGL,
                window_size = window_size,
                frame_bound = (day_begin, day_end))
 observation = env.reset()
+
 while True:
     action = env.action_space.sample()
     observation, reward, done, info = env.step(action)
