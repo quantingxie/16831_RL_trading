@@ -37,5 +37,8 @@ qs.extend_pandas()
 net_worth = pd.Series(env.history['total_profit'], index=STOCKS_GOOGL.index[end_train_date+1:end_test_date])
 returns = net_worth.pct_change().iloc[1:]
 
+pd.DataFrame(env.history['total_profit']).to_csv("profit_PPO.csv")
+
+print(returns)
 qs.reports.full(returns)
 qs.reports.html(returns, output='PPO_quantstats.html')
